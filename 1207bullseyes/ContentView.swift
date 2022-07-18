@@ -9,24 +9,22 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var AlertIsVisible = false
+    @State var alertIsVisible = false
     @State var sliderValue = 50.0
     @State var target = Int.random(in: 1...100)
     @State var score = 0
     @State var currentRound = 1
     
-    let midnightBlue = Color(red: 0/255, green: 51/255, blue: 102/255)
     
     struct LabelStyle : ViewModifier {
         func body(content: Content) -> some View {
             return content
-                .foregroundColor(Color.white)
-                .modifier(Shadow())
+                .foregroundColor(Color("textColor"))
                 .font(Font.custom("Arial Rounded MT Bold", size: 18))
         }
     }
     
-    struct ButtonLTextStyle : ViewModifier {
+    struct ButtonLgTextStyle : ViewModifier {
         func body(content: Content) -> some View {
             return content
                 .foregroundColor(.black)
@@ -34,30 +32,23 @@ struct ContentView: View {
         }
     }
     
-    struct ButtonSTextStyle : ViewModifier {
+    struct ButtonSmTextStyle : ViewModifier {
         func body(content: Content) -> some View {
             return content
                 .foregroundColor(.black)
                 .font(Font.custom("Arial Rounded MT Bold", size: 10))
-            
         }
     }
     
     struct ValueStyle : ViewModifier {
         func body(content: Content) -> some View {
             return content
-                .foregroundColor(.yellow)
-                .modifier(Shadow())
+                .foregroundColor(Color("numColor"))
                 .font(Font.custom("Arial Rounded MT Bold", size: 24))
         }
     }
     
-    struct Shadow : ViewModifier {
-        func body(content: Content) -> some View {
-            return content
-                .shadow(color: .black, radius: 5, x: 2, y: 2)
-        }
-    }
+
     
     var body: some View {
         
@@ -82,7 +73,7 @@ struct ContentView: View {
             HStack {
                 Text("1").modifier(LabelStyle())
                 Slider(value: $sliderValue, in: 1...100)
-                    .accentColor(.green)
+                    .accentColor(.orange)
                 Text("100").modifier(LabelStyle())
                 
             }
@@ -94,12 +85,12 @@ struct ContentView: View {
             //button row
             Button(action: {
                 print("Button pressed!!!!")
-                self.AlertIsVisible = true
+                alertIsVisible = true
                 
             }) {
-                Text("Hit me!!!").modifier(ButtonLTextStyle())
+                Text("Hit me 👊🏽").modifier(ButtonLgTextStyle())
             }
-            .alert(isPresented: $AlertIsVisible) { () ->
+            .alert(isPresented: $alertIsVisible) { () ->
                 Alert in
                 //let roundedValue: Int = Int(sliderValue.rounded())
                 return Alert (title: Text(alertTitle()), message: Text(
@@ -110,7 +101,11 @@ struct ContentView: View {
                     self.currentRound = 1 + self.currentRound
                 })
             }
-            .background(Image("Button")).modifier(Shadow())
+            .padding(10)
+            .background(
+                Color("buttonBgColor")
+                    .cornerRadius(8)
+            )
             
             Spacer()
             //score row
@@ -128,17 +123,16 @@ struct ContentView: View {
                         Image(systemName: "arrow.counterclockwise")
                             .foregroundColor(.black)
                         
-                        Text("START OVER").modifier(ButtonSTextStyle())
-                    }.padding()
+                        Text("START OVER").modifier(ButtonSmTextStyle())
+                    }
+                    .padding()
                     
                 }
-                .background(Image("Button")
-                                .resizable()
-                                .frame(width: 130, height: 40)
-                            
+                .frame(height: 40)
+                .background(
+                    Color("buttonBgColor")
+                        .cornerRadius(8)
                 )
-                
-                .modifier(Shadow())
                 
                 
                 
@@ -154,20 +148,21 @@ struct ContentView: View {
                 Spacer()
                 
                 NavigationLink(
-                    destination: aboutView(),
+                    destination: AboutView(),
                     label: {
                         
                         HStack {
                             Image(systemName: "info.circle")
                                 .foregroundColor(.black)
-                            Text("INFO").modifier(ButtonSTextStyle())
+                            Text("INFO").modifier(ButtonSmTextStyle())
                         }
                         .padding()
-                        .background(Image("Button")
-                                        .resizable()
-                                        .frame(width: 130, height: 40)
+                        .frame(height: 40)
+                        .background(
+                            Color("buttonBgColor")
+                                .cornerRadius(8)
+                        )
 
-                        ).modifier(Shadow())
                     })
                 
              
@@ -179,11 +174,8 @@ struct ContentView: View {
             
             
         }
-        .padding(.leading,20)
-        .padding(.trailing,20)
-        .background(Image("Background"), alignment: .center)
-        .scaledToFit()
-        .accentColor(midnightBlue)
+        .padding(.horizontal, 20)
+        .background(Color("bgColor"))
         .navigationBarTitle("Bullseye")
     }
     
